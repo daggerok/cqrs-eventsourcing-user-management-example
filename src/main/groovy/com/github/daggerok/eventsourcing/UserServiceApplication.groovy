@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 @SpringBootApplication
 class UserServiceApplication {
 
-	static void main(String[] args) {
-		SpringApplication.run(UserServiceApplication, args)
-	}
+    static void main(String[] args) {
+        SpringApplication.run(UserServiceApplication, args)
+    }
 }

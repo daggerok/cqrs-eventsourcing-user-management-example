@@ -13,10 +13,10 @@ class Handlers {
 
     def showInfo(ServerRequest serverRequest) {
         String baseUrl = serverRequest.uri().with { "$scheme://$authority" }
-        def API = [ info: "GET $baseUrl/api/v1/messages/info"               as String,
-                    add : "POST $baseUrl/api/v1/messages message={message}" as String,
-                    read: "GET $baseUrl/api/v1/messages/{id}"               as String,
-                    all : "GET $baseUrl/api/v1/messages"                    as String, ]
+        def API = [info: "GET $baseUrl/api/v1/messages/info" as String,
+                   add : "POST $baseUrl/api/v1/messages message={message}" as String,
+                   read: "GET $baseUrl/api/v1/messages/{id}" as String,
+                   all : "GET $baseUrl/api/v1/messages" as String,]
         ServerResponse.ok().body(Mono.just(API), Map)
     }
 
@@ -27,8 +27,10 @@ class Handlers {
                 .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {})
                 .map { it["message"] ?: "Hello!" }
                 .doOnNext { messages[id] = it }
-                .map { [ id     : id,
-                         message: messages[id], ] }
+                .map {
+                    [id     : id,
+                     message: messages[id],]
+                }
         ServerResponse.created(URI.create(url)).body(response, Map)
     }
 
