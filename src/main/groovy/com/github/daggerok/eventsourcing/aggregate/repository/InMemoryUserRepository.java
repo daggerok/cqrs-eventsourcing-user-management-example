@@ -20,8 +20,9 @@ public class InMemoryUserRepository implements UserRepository {
         UUID aggregateId = user.getUserId();
         Collection<DomainEvent> newEvents = user.getEventStream();
         Collection<DomainEvent> oldEvents = eventStore.getOrDefault(aggregateId, new CopyOnWriteArrayList<>());
-        eventStore.put(aggregateId, Stream.concat(oldEvents.stream(), newEvents.stream())
-                                          .collect(Collectors.toList()));
+        Collection<DomainEvent> events = Stream.concat(oldEvents.stream(), newEvents.stream())
+                                               .collect(Collectors.toList());
+        eventStore.put(aggregateId, new CopyOnWriteArrayList<>(events));
         user.flushEvents();
     }
 
