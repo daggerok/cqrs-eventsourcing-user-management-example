@@ -3,11 +3,11 @@ package com.github.daggerok.eventsourcing.aggregate.repository;
 import com.github.daggerok.eventsourcing.aggregate.User;
 import com.github.daggerok.eventsourcing.aggregate.event.DomainEvent;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,10 +17,11 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void save(User user) {
-        Collection<DomainEvent> domainEvents = eventStore.getOrDefault(user.getUserId(), new ArrayList<>());
-        Collection<DomainEvent> newEvents = Stream.concat(domainEvents.stream(), user.getEventStream().stream())
-                                                  .collect(Collectors.toList());
-        eventStore.put(user.getUserId(), newEvents);
+        UUID aggregateId = user.getUserId();
+        Collection<DomainEvent> newEvents = user.getEventStream();
+        Collection<DomainEvent> oldEvents = eventStore.getOrDefault(aggregateId, new CopyOnWriteArrayList<>());
+        eventStore.put(aggregateId, Stream.concat(oldEvents.stream(), newEvents.stream())
+                                          .collect(Collectors.toList()));
         user.flushEvents();
     }
 
