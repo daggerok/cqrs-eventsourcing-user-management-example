@@ -5,15 +5,19 @@ import spock.lang.Specification
 class UserTest extends Specification {
 
     def 'created user should have pending state'() {
+        given:
+            def user = new User()
         when:
-            def user = new User(UUID.randomUUID())
+            user.create()
         then:
             user.state == UserStatus.PENDING
     }
 
     def 'active user should not be activated'() {
         given:
-            def user = new User(UUID.randomUUID())
+            def user = new User()
+        and:
+            user.create()
         and:
             user.activate()
         when:
@@ -24,7 +28,9 @@ class UserTest extends Specification {
 
     def 'created user can be activated'() {
         given:
-            def user = new User(UUID.randomUUID())
+            def user = new User()
+        and:
+            user.create()
         when:
             user.activate()
         then:
@@ -33,7 +39,9 @@ class UserTest extends Specification {
 
     def 'suspended user cannot be deactivated'() {
         given:
-            def user = new User(UUID.randomUUID())
+            def user = new User()
+        and:
+            user.create()
         and:
             user.deactivate()
         when:
@@ -44,7 +52,9 @@ class UserTest extends Specification {
 
     def 'active user can be deactivated'() {
         given:
-            def user = new User(UUID.randomUUID())
+            def user = new User()
+        and:
+            user.create()
         and:
             user.activate()
         when:

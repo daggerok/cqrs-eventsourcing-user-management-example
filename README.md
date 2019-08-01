@@ -1,6 +1,8 @@
 # CQRS and event sourcing app [![Build Status](https://travis-ci.org/daggerok/cqrs-eventsourcing-user-management-example.svg?branch=master)](https://travis-ci.org/daggerok/cqrs-eventsourcing-user-management-example)
 CQRS and event sourcing using dynamic groovy, spring-boot and spring-webflux
 
+Status: _in progress, implemented in-memory event store only, follow updates..._
+
 ```bash
 ./gradlew bootRun
 

@@ -2,12 +2,11 @@ package com.github.daggerok.eventsourcing.user;
 
 import com.github.daggerok.eventsourcing.user.event.DomainEvent;
 import com.github.daggerok.eventsourcing.user.event.UserActivated;
+import com.github.daggerok.eventsourcing.user.event.UserCreated;
 import com.github.daggerok.eventsourcing.user.event.UserDeactivated;
 import io.vavr.API;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -21,12 +20,12 @@ import static io.vavr.Predicates.instanceOf;
  * Created user can be:
  * - activated
  * - deactivated
- *
+ * <p>
  * Activated user can be:
  * - deactivated
  * Activated user cannot be:
  * - activated
- *
+ * <p>
  * Deactivated user can be:
  * - activated
  * Deactivated user cannot be:
@@ -34,27 +33,45 @@ import static io.vavr.Predicates.instanceOf;
  */
 @Getter
 @ToString
+@NoArgsConstructor
 public class User implements Function<DomainEvent, User> {
 
-    private final Collection<DomainEvent> eventStream = new CopyOnWriteArrayList<>();
-    private final UUID userId;
+    private UUID userId;
     private UserStatus state;
 
-    public User(UUID userId) {
-        this.userId = userId;
-        state = UserStatus.PENDING;
-    }
+    private final Collection<DomainEvent> eventStream = new CopyOnWriteArrayList<>();
 
     public void flushEvents() {
         eventStream.clear();
     }
 
-    // cmd 1:
+    public User(UUID userId) {
+        create(userId);
+    }
+    public void create(UUID userId) {
+        onCreate(new UserCreated(userId));
+    }
+
+    // cmd 0: create
+    public void create() {
+        create(UUID.randomUUID());
+    }
+
+    // evt: 0
+    private User onCreate(UserCreated event) {
+        eventStream.add(event);
+        this.userId = event.getAggregateId();
+        state = UserStatus.PENDING;
+        return this;
+    }
+
+    // cmd 1: activate
     public void activate() {
         if (state == UserStatus.ACTIVE)
             throw new IllegalStateException("user is already active");
-        onActivate(new UserActivated(userId, ZonedDateTime.now()));
+        onActivate(new UserActivated(userId));
     }
+
     // evt: 1
     private User onActivate(UserActivated event) {
         eventStream.add(event);
@@ -62,13 +79,14 @@ public class User implements Function<DomainEvent, User> {
         return this;
     }
 
-    // cmd 2:
+    // cmd 2: deactivate
     public void deactivate() {
         if (state == UserStatus.SUSPENDED)
             throw new IllegalStateException("user is already suspended");
-        onDeactivate(new UserDeactivated(userId, ZonedDateTime.now()));
+        onDeactivate(new UserDeactivated(userId));
     }
-    // evt 2:
+
+    // evt: 2
     private User onDeactivate(UserDeactivated event) {
         eventStream.add(event);
         state = UserStatus.SUSPENDED;
@@ -77,14 +95,16 @@ public class User implements Function<DomainEvent, User> {
 
     /* es */
 
-    public static User recreate(User snapshot, Collection<DomainEvent> domainEvents) {
+    public static User recreate(UUID userId, Collection<DomainEvent> domainEvents) {
+        User snapshot = new User(userId);
         return io.vavr.collection.List.ofAll(domainEvents)
-                .foldLeft(snapshot, User::apply);
+                                      .foldLeft(snapshot, User::apply);
     }
 
     @Override
     public User apply(DomainEvent domainEvent) {
         return API.Match(domainEvent).of(
+                Case($(instanceOf(UserCreated.class)), this::onCreate),
                 Case($(instanceOf(UserActivated.class)), this::onActivate),
                 Case($(instanceOf(UserDeactivated.class)), this::onDeactivate)
         );

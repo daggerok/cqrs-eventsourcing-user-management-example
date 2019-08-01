@@ -8,7 +8,9 @@ class UserRepositoryTest extends Specification {
 
     def 'save user operation should flush user eventStream'() {
         given:
-            def user = new User(UUID.randomUUID())
+            def user = new User()
+        and:
+            user.create()
         and:
             user.activate()
         when:
@@ -21,7 +23,9 @@ class UserRepositoryTest extends Specification {
         given:
             def userId = UUID.randomUUID()
         and:
-            def user = new User(userId)
+            def user = new User()
+        and:
+            user.create(userId)
         and:
             user.activate()
         and:

@@ -25,9 +25,8 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User find(UUID userId) {
-        User snapshot = new User(userId);
         return eventStore.containsKey(userId)
-                ? User.recreate(snapshot, eventStore.get(userId))
-                : snapshot;
+                ? User.recreate(userId, eventStore.get(userId))
+                : null;
     }
 }

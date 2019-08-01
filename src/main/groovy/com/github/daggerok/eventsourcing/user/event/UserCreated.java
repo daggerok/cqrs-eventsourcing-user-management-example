@@ -12,9 +12,8 @@ import java.util.UUID;
 @Getter
 @ToString
 @RequiredArgsConstructor
-// @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class UserDeactivated implements DomainEvent {
+public class UserCreated implements DomainEvent {
     @NonNull UUID aggregateId;
-    final UserStatus state = UserStatus.SUSPENDED;
+    final UserStatus state = UserStatus.PENDING;
     final ZonedDateTime at = ZonedDateTime.now();
 }
