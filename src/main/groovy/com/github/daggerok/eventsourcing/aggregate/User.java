@@ -1,11 +1,13 @@
-package com.github.daggerok.eventsourcing.user;
+package com.github.daggerok.eventsourcing.aggregate;
 
-import com.github.daggerok.eventsourcing.user.event.DomainEvent;
-import com.github.daggerok.eventsourcing.user.event.UserActivated;
-import com.github.daggerok.eventsourcing.user.event.UserCreated;
-import com.github.daggerok.eventsourcing.user.event.UserDeactivated;
+import com.github.daggerok.eventsourcing.aggregate.event.DomainEvent;
+import com.github.daggerok.eventsourcing.aggregate.event.UserActivated;
+import com.github.daggerok.eventsourcing.aggregate.event.UserCreated;
+import com.github.daggerok.eventsourcing.aggregate.event.UserDeactivated;
 import io.vavr.API;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -48,6 +50,7 @@ public class User implements Function<DomainEvent, User> {
     public User(UUID userId) {
         create(userId);
     }
+
     public void create(UUID userId) {
         onCreate(new UserCreated(userId));
     }

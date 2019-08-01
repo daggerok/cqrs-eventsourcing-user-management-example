@@ -15,15 +15,4 @@ class UserServiceApplicationTests extends Specification {
         expect: "Handlers bean is created"
             handlers
     }
-
-    def "ololo trololo"() {
-        given:
-            int a = 1
-        and:
-            int b = 2
-        when:
-            int c = a + b
-        then:
-            c == 3
-    }
 }

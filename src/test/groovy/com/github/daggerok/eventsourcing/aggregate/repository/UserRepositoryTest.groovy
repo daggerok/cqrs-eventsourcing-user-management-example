@@ -1,5 +1,7 @@
-package com.github.daggerok.eventsourcing.user
+package com.github.daggerok.eventsourcing.aggregate.repository
 
+import com.github.daggerok.eventsourcing.aggregate.User
+import com.github.daggerok.eventsourcing.aggregate.UserStatus
 import spock.lang.Specification
 
 class UserRepositoryTest extends Specification {

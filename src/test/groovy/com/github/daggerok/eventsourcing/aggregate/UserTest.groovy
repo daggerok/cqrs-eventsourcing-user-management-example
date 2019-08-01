@@ -1,4 +1,4 @@
-package com.github.daggerok.eventsourcing.user
+package com.github.daggerok.eventsourcing.aggregate
 
 import spock.lang.Specification
 

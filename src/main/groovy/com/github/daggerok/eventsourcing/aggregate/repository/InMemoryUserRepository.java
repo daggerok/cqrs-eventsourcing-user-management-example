@@ -1,6 +1,7 @@
-package com.github.daggerok.eventsourcing.user;
+package com.github.daggerok.eventsourcing.aggregate.repository;
 
-import com.github.daggerok.eventsourcing.user.event.DomainEvent;
+import com.github.daggerok.eventsourcing.aggregate.User;
+import com.github.daggerok.eventsourcing.aggregate.event.DomainEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
