@@ -98,8 +98,7 @@ public class User implements Function<DomainEvent, User> {
 
     /* es */
 
-    public static User recreate(UUID userId, Collection<DomainEvent> domainEvents) {
-        User snapshot = new User(userId);
+    public static User recreate(User snapshot, Collection<DomainEvent> domainEvents) {
         return io.vavr.collection.List.ofAll(domainEvents)
                                       .foldLeft(snapshot, User::apply);
     }
