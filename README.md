@@ -3,6 +3,16 @@ CQRS and event sourcing using dynamic groovy, spring-boot and spring-webflux
 
 Status: _in progress, implemented in-memory event store only, follow updates..._
 
+_run kafka_
+
+```bash
+rm -rf /tmp/c ; git clone --depth=1 https://github.com/confluentinc/cp-docker-images.git /tmp/c
+docker-compose -f /tmp/c/examples/kafka-single-node/docker-compose.yml up -d
+docker-compose -f /tmp/c/examples/kafka-single-node/docker-compose.yml down -v --rmi local
+```
+
+_run app and test_
+
 ```bash
 ./gradlew bootRun
 
