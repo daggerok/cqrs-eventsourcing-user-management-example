@@ -5,6 +5,10 @@ plugins {
     id 'idea'
 }
 
+ext {
+    set('springCloudVersion', "Hoxton.M1")
+}
+
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.github.daggerok.eventsourcing'
@@ -17,6 +21,12 @@ repositories {
 }
 
 dependencies {
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"))
+    implementation 'org.springframework.cloud:spring-cloud-stream'
+    // implementation 'org.springframework.cloud:spring-cloud-stream-reactive'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
+    testImplementation 'org.springframework.cloud:spring-cloud-stream-test-support'
+
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.codehaus.groovy:groovy'
