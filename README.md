@@ -24,6 +24,21 @@ http :8080
 
 **NOTE:** _For better developer experience during testing, use idea cURL integration tests from `rest-client*` files. Read more: https://www.jetbrains.com/help/idea/http-client-in-product-code-editor.html_
 
+## why?
+
+just see how everything is clear in next analitics:
+
+- OrderCreated(id=123)
+- ItemAdded(product=Bose Headphones, price=400)
+- FollowSimilarItemsLink(product=Sony Headphones)
+- AccessReviews()
+- VoteReviewHelpful(answer=5/5)
+- ItemAdded(product=Sony Headphones, price=450)
+- ItemRemoved(product=Bose Headphones, price=400)
+- OrderConfirmed()
+- OrderShipped()
+
 resources:
 
 * [YouTube: Building Event Driven Systems with Spring Cloud Stream](https://www.youtube.com/watch?v=LvmPa7YKgqM&t=2673s)
+* [YouTube: 2018-10 Advanced Microservices Patterns: CQRS and Event Sourcing](https://www.youtube.com/watch?v=W_wySQ0lTI4&t=1448s)
